@@ -1,0 +1,132 @@
+####This code book describes the variables, the data, and the related transformations that were performed to clean up the data.
+
+> Variables and related transformations
+        
+Variable      | Description
+------------- | -------------
+ftr           | data frame to store the labels for the measurements
+test          | data frame to store test dataset
+train         | data frame to store training dataset
+testy         | data frame to store activity labels for the test dataset
+trainy        | data frame to store activity labels for the training dataset
+tests         | data frame to store subjects(in order) for the test dataset
+trains        | data frame to store subjects(in order) for the training dataset
+lab           | data frame to store activity labels
+sub           | data frame that combines the *tests* and *trains* into a single data frame, with the order of the rows preserved
+mr            | data frame that combines the train and tests datasets, with the order of the rows preserved
+mr1           | data frame to selectively stores columns that are means and sd(s) of the measurements
+mra           | data frame that combines the *testy* and *trainy* into a single data frame, with the order of the rows preserved
+mfinal        | an intermediate data frame to combine *mr1*, *mra* and *sub* into a single data frame, columnwise
+mfinal2       | data frame that merges the activity numbers with their respective labels
+ftr1          | data frame that is subset of the columns of the *ftr* data frame
+tidy          | data frame that stores the final tidy dataset
+
+> Data- The tidy dataset contains $62$ columns, which are described in order in the following points.
+
+* Subject-
+*The test subjects are labelled from 1 to 30.*
+  
+    + 1
+    + 2
+    + 3
+    + 4
+    + 5
+    + 6
+    + 7
+    + 8
+    + 9
+    + 10
+    + 11
+    + 12
+    + 13
+    + 14
+    + 15
+    + 16
+    + 17
+    + 18
+    + 19
+    + 20
+    + 21
+    + 22
+    + 23
+    + 24
+    + 25
+    + 26
+    + 27
+    + 28
+    + 29
+    + 30
+  
+* Activity description-
+*describes the activity being performed by the subject when taking measurements.*
+
+    + WALKING
+    + WALKING_UPSTAIRS
+    + WALKING_DOWNSTAIRS
+    + SITTING
+    + STANDING
+    + LAYING
+    
+    
+* The following 60 column labels give the measurements on the mean and standard deviation for each measurement. The labelling has been done with descriptive variable names._fft implies fast fourier transform, acc implies accelaration, ang implies angular, and the (x, y, z) at the end of the variables give the direction of measurement._
+
+    + mean_gravity_acc_signal_x	
+    + mean_gravity_acc_signal_y	
+    + mean_gravity_acc_signal_z	
+    + sd_gravity_acc_signal_x	
+    + sd_gravity_acc_signal_y	
+    + sd_gravity_acc_signal_z	
+    + mean_body_jerk_acc_x	
+    + mean_body_jerk_acc_y	
+    + mean_body_jerk_acc_z	
+    + sd_body_jerk_acc_x	
+    + sd_body_jerk_acc_y	
+    + sd_body_jerk_acc_z	
+    + mean_body_ang_velocity_x	
+    + mean_body_ang_velocity_y	
+    + mean_body_ang_velocity_z	
+    + sd_body_ang_velocity_x	
+    + sd_body_ang_velocity_y	
+    + sd_body_ang_velocity_z	
+    + mean_body_jerk_ang_velocity_x	
+    + mean_body_jerk_ang_velocity_y	
+    + mean_body_jerk_ang_velocity_z	
+    + sd_body_jerk_ang_velocity_x	
+    + sd_body_jerk_ang_velocity_y	
+    + sd_body_jerk_ang_velocity_z	
+    + mean_body_acc_magnitude	
+    + sd_body_acc_magnitude	
+    + mean_gravity_acc_magnitude	
+    + sd_gravity_acc_magnitude	
+    + mean_body_jerk_acc_magnitude	
+    + sd_body_jerk_acc_magnitude	
+    + mean_body_ang_velocity_magnitude	
+    + sd_body_ang_velocity_magnitude	
+    + mean_body_jerk_ang_velocity_magnitude	
+    + sd_body_jerk_ang_velocity_magnitude	
+    + mean_fft_body_acc_x	
+    + mean_fft_body_acc_y	
+    + mean_fft_body_acc_z	
+    + sd_fft_body_acc_x	
+    + sd_fft_body_acc_y	
+    + sd_fft_body_acc_z	
+    + mean_fft_body_jerk_acc_x	
+    + mean_fft_body_jerk_acc_y	
+    + mean_fft_body_jerk_acc_z	
+    + sd_fft_body_jerk_acc_x	
+    + sd_fft_body_jerk_acc_y	
+    + sd_fft_body_jerk_acc_z	
+    + mean_fft_body_ang_velocity_x	
+    + mean_fft_body_ang_velocity_y	
+    + mean_fft_body_ang_velocity_z	
+    + sd_fft_body_ang_velocity_x	
+    + sd_fft_body_ang_velocity_y	
+    + sd_fft_body_ang_velocity_z	
+    + mean_fft_body_acc_magnitude	
+    + sd_fft_body_acc_magnitude	
+    + mean_fft_body_jerk_acc_magnitude	
+    + sd_fft_body_jerk_acc_magnitude	
+    + mean_fft_body_ang_velocity_magnitude	
+    + sd_fft_body_ang_velocity_magnitude	
+    + mean_fft_body_jerk_ang_velocity_magnitude	
+    + sd_fft_body_jerk_ang_velocity_magnitude

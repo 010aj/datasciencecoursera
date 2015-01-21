@@ -1,0 +1,96 @@
+###This script will create a tidy data set based on the parameters asked.
+
+The first 7 lines of code read the .txt files into data frames.
+
+```{r}
+setwd("C:/Users/Ankur/Downloads/UCI HAR Dataset") #This setting is for this user only.
+ftr<-read.table("features.txt")
+test<-read.table("test/X_test.txt")
+train<-read.table("train/X_train.txt")
+
+testy<-read.table("test/y_test.txt")
+trainy<-read.table("train/y_train.txt")
+
+tests<-read.table("test/subject_test.txt")
+trains<-read.table("train/subject_train.txt")
+
+lab<-read.table("activity_labels.txt")
+```
+
+The *sub* data frame combines the subjects(1 to 30) into a single data frame, with the order of the rows preserved.
+
+```{r}
+sub<-rbind(trains, tests)
+colnames(sub)<-"subject"
+```
+
+
+#####Merging training and test sets
+The *mr* data frame combines the train and tests datasets, with the order of the rows preserved.
+
+```{r}
+mr<-rbind(train, test)
+```
+
+
+#####Extracting measurements on the mean and standard deviation
+The *mr1* data frame selectively stores columns that are means and sd(s) of the measurements.
+
+```{r}
+mr1<-mr[,c(41:46,81:86, 121:126, 161:166, 201:202, 214:215, 227:228, 240:241, 253:254, 266:271, 345:350, 424:429, 503:504, 516:517, 529:530, 542:543)]
+```
+
+#####Naming activities in the dataset
+
+After storing the actvities in *mra*, the *mfinal2* data frame merges the activity numbers with their respective labels.
+
+```{r}
+mra<-rbind(trainy, testy)
+mfinal<-cbind(mr1, mra, sub)
+mfinal2<-merge(mfinal,lab)
+mfinal2<-mfinal2[,-1]
+```
+
+#####Labelling the data set with descriptive variable names
+
+After storing the selective column names in *ftr1*, a third column is added to this data frame, containg the descriptive variable names, in order.
+
+```{r}
+ftr1<-ftr[c(41:46,81:86, 121:126, 161:166, 201:202, 214:215, 227:228, 240:241, 253:254, 266:271, 345:350, 424:429, 503:504, 516:517, 529:530, 542:543),]
+
+ftr1[[3]]<-c("mean_gravity_acc_signal_x","mean_gravity_acc_signal_y","mean_gravity_acc_signal_z","sd_gravity_acc_signal_x","sd_gravity_acc_signal_y","sd_gravity_acc_signal_z","mean_body_jerk_acc_x","mean_body_jerk_acc_y","mean_body_jerk_acc_z","sd_body_jerk_acc_x","sd_body_jerk_acc_y","sd_body_jerk_acc_z","mean_body_ang_velocity_x","mean_body_ang_velocity_y","mean_body_ang_velocity_z","sd_body_ang_velocity_x","sd_body_ang_velocity_y","sd_body_ang_velocity_z","mean_body_jerk_ang_velocity_x","mean_body_jerk_ang_velocity_y","mean_body_jerk_ang_velocity_z","sd_body_jerk_ang_velocity_x","sd_body_jerk_ang_velocity_y","sd_body_jerk_ang_velocity_z","mean_body_acc_magnitude","sd_body_acc_magnitude","mean_gravity_acc_magnitude","sd_gravity_acc_magnitude","mean_body_jerk_acc_magnitude","sd_body_jerk_acc_magnitude","mean_body_ang_velocity_magnitude","sd_body_ang_velocity_magnitude","mean_body_jerk_ang_velocity_magnitude","sd_body_jerk_ang_velocity_magnitude","mean_fft_body_acc_x","mean_fft_body_acc_y","mean_fft_body_acc_z","sd_fft_body_acc_x","sd_fft_body_acc_y","sd_fft_body_acc_z","mean_fft_body_jerk_acc_x","mean_fft_body_jerk_acc_y","mean_fft_body_jerk_acc_z","sd_fft_body_jerk_acc_x","sd_fft_body_jerk_acc_y","sd_fft_body_jerk_acc_z","mean_fft_body_ang_velocity_x","mean_fft_body_ang_velocity_y","mean_fft_body_ang_velocity_z","sd_fft_body_ang_velocity_x","sd_fft_body_ang_velocity_y","sd_fft_body_ang_velocity_z","mean_fft_body_acc_magnitude","sd_fft_body_acc_magnitude","mean_fft_body_jerk_acc_magnitude","sd_fft_body_jerk_acc_magnitude","mean_fft_body_ang_velocity_magnitude","sd_fft_body_ang_velocity_magnitude", "mean_fft_body_jerk_ang_velocity_magnitude","sd_fft_body_jerk_ang_velocity_magnitude")
+
+colnames(mfinal2)<-c(as.character(ftr1[[3]]), "Subject", "Activity description")
+```
+
+#####Creating a tidy data set
+
+The following lines of code create an independent tidy data set with the average of each variable for each activity and each subject.
+
+```{r}
+tidy<-data.frame()
+df<-data.frame()
+
+for(i in 1:30){
+  
+  for(j in 1:6){
+    
+    df<-mfinal2[(mfinal2$Subject==i)&(mfinal2["Activity description"]==as.character(lab[j,2])),]
+    
+    res <- unlist(lapply(df[,1:60], function(x) sum(x, na.rm=T)))
+    
+    d<-data.frame(t(res),i, as.character(lab[j,2]))
+    
+    tidy<-rbind(tidy, d)     
+    
+  }
+}
+
+tidy<-tidy[c(61,62,1:60)]
+colnames(tidy)<-c("Subject", "Activity description", as.character(ftr1[[3]]))
+```
+
+Finally, the files are written into a .txt file.
+```{r}
+write.table(tidy, "c:/Users/Ankur/Downloads/mydata.txt", sep="\t",row.name=FALSE)
+```
